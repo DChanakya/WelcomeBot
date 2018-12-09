@@ -1,0 +1,81 @@
+import RPi.GPIO as IO
+import time
+IO.setwarnings(False)
+IO.setmode(IO.BOARD)
+IO.setup(16,IO.IN) #GPIO 2 -> Left IR out
+IO.setup(18,IO.IN) #GPIO 3 -> Right IR out
+IO.setup(32,IO.OUT) #GPIO 4 -> Motor 1 terminal A
+IO.setup(36,IO.OUT) #GPIO 14 -> Motor 1 terminal B
+IO.setup(38,IO.OUT) #GPIO 17 -> Motor Left terminal A
+IO.setup(40,IO.OUT) #GPIO 18 -> Motor Left terminal B
+
+junctionCross=0
+
+def selectRouting(stri):
+    global junctionCross;
+    if("principal" in stri):
+        junctionCross=2;
+    else:
+        junctionCross=4;
+
+
+def burst():
+        IO.output(32,True) #1A+
+        IO.output(36,False) #1B-
+        IO.output(38,True) #2A+
+        IO.output(40,False) #2B-
+        time.sleep(0.8)
+        
+        IO.output(32,False) #1A+
+        IO.output(36,False) #1B-
+        IO.output(38,False) #2A+
+        IO.output(40,False) #2B-
+
+      
+
+def linefollow(junctionCross):
+    while 1:
+        if(junctionCross==0):
+            break;
+        if(IO.input(16)==True and IO.input(18)==True): #both while move forward     
+            print("Moving Forward")
+            IO.output(32,True) #1A+
+            IO.output(36,False) #1B-
+            IO.output(38,True) #2A+
+            IO.output(40,False) #2B-
+            
+        elif(IO.input(16)==True and IO.input(18)==False): #turn right  
+            print("Moving Right")
+            print("------------------------")
+            IO.output(32,True) #1A+
+            IO.output(36,True) #1B-
+            IO.output(38,True) #2A+
+            IO.output(40,False) #2B-
+           
+        elif(IO.input(16)==False and IO.input(18)==True): #turn left
+            print("Moving Left")
+            IO.output(32,True) #1A+
+            IO.output(36,False) #1B-
+            IO.output(38,True) #2A+
+            IO.output(40,True) #2B-
+        else:  #stay still
+            print("Stopped at black line")
+            IO.output(32,True) #1A+
+            IO.output(36,True) #1B-
+            IO.output(38,True) #2A+
+            IO.output(40,True) #2B-
+            junctionCross=junctionCross-1;
+            
+            burst();
+            linefollow(junctionCross);
+            
+
+def startMoving():
+    global junctionCross;
+    selectRouting("principal");
+    burst();
+    linefollow(junctionCross);
+    time.sleep(9);
+    linefollow(2)
+        
+startMoving();
