@@ -17,8 +17,8 @@ IO.setup(7,IO.OUT) #Right Motor Enabler
 pwml=IO.PWM(5,100)
 pwmr=IO.PWM(7,100)
 
-pwml.start(30)
-pwmr.start(30)
+pwml.start(0)
+pwmr.start(0)
 
 IO.output(5,IO.LOW)
 IO.output(7,IO.LOW)
@@ -28,46 +28,56 @@ while 1:
     if(IO.input(16)==True and IO.input(18)==True): #both while move forward     
         
         print("Moving Forward")
-        IO.output(32,True) #1A+
-        IO.output(36,False) #1B-
-        IO.output(38,True) #2A+
-        IO.output(40,False) #2B-
-        IO.output(5,IO.HIGH)
-        IO.output(7,IO.HIGH)
-        time.sleep(1)
+##        IO.output(32,True) #1A+
+##        IO.output(36,False) #1B-
+##        IO.output(38,True) #2A+
+##        IO.output(40,False) #2B-
+        pwml.ChangeDutyCycle(35)
+        pwmr.ChangeDutyCycle(50)
+##        IO.output(5,IO.HIGH)
+##        IO.output(7,IO.HIGH)
+        #time.sleep(1)
+##        pwml.changeDutyCycle(20)
+##        pwmr.changeDutyCycle(20)
+    elif(IO.input(16)==True and IO.input(18)==False): #turn right      
         
-    elif(IO.input(16)==False and IO.input(18)==True): #turn right      
-        
-
+       # pwml.changeDutyCycle(15)
         print("Moving Right")
         print("------------------------")
-        IO.output(32,True) #1A+
-        IO.output(36,True) #1B-
-        IO.output(38,True) #2A+
-        IO.output(40,False) #2B-
-        IO.output(5,IO.HIGH)
-        IO.output(7,IO.HIGH)
-        time.sleep(1)
+##        IO.output(32,True) #1A+
+##        IO.output(36,True) #1B-
+##        IO.output(38,True) #2A+
+##        IO.output(40,False) #2B-
+        pwml.ChangeDutyCycle(25)
+        pwmr.ChangeDutyCycle(0)
+##        IO.output(5,IO.HIGH)
+##        IO.output(7,IO.HIGH)
+        #time.sleep(1)
        
-    elif(IO.input(16)==True and IO.input(18)==False): #turn left    
+    elif(IO.input(16)==False and IO.input(18)==True): #turn left    
         
-
+       # pwmr.changeDutyCycle(15)
         print("Moving Left")
-        IO.output(32,True) #1A+
-        IO.output(36,False) #1B-
-        IO.output(38,True) #2A+
-        IO.output(40,True) #2B-
-        IO.output(5,IO.HIGH)
-        IO.output(7,IO.HIGH)
-        time.sleep(1)
+##        IO.output(32,True) #1A+
+##        IO.output(36,False) #1B-
+##        IO.output(38,True) #2A+
+##        IO.output(40,True) #2B-
+        pwml.ChangeDutyCycle(0)
+        pwmr.ChangeDutyCycle(35)
+##        IO.output(5,IO.HIGH)
+##        IO.output(7,IO.HIGH)
+        #time.sleep(1)
     else:  #stay still
         print("No black line")
-        IO.output(5,IO.HIGH)
-        IO.output(7,IO.HIGH)
-        
-        IO.output(32,True) #1A+
-        IO.output(36,True) #1B-
-        IO.output(38,True) #2A+
-        IO.output(40,True) #2B-
-        time.sleep(1)
-        
+##        IO.output(5,IO.HIGH)
+##        IO.output(7,IO.HIGH)
+##        
+##        IO.output(32,True) #1A+
+##        IO.output(36,True) #1B-
+##        IO.output(38,True) #2A+
+##        IO.output(40,True) #2B-
+##        #time.sleep(1)
+##        
+        pwml.ChangeDutyCycle(0)
+        pwmr.ChangeDutyCycle(0)
+
